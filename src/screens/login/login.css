@@ -1,175 +1,38 @@
-.login-page {
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-  }
-  
-  .login-page .div {
-    background-color: #ffffff;
-    height: 1024px;
-    overflow: hidden;
-    position: relative;
-    width: 1440px;
-  }
-  
-  .login-page .login {
-    height: 543px;
-    left: 502px;
-    position: absolute;
-    top: 285px;
-    width: 433px;
-  }
-  
-  .login-page .overlap {
-    border: 1px solid;
-    border-color: #000000;
-    border-radius: 50px;
-    height: 543px;
-    position: relative;
-    width: 431px;
-  }
-  
-  .login-page .boto {
-    height: 60px;
-    left: 39px;
-    position: absolute;
-    top: 375px;
-    width: 352px;
-  }
-  
-  .login-page .overlap-group {
-    background-color: #9e933a;
-    border-radius: 50px;
-    height: 60px;
-    position: relative;
-    width: 350px;
-  }
-  
-  .login-page .text-wrapper {
-    color: #ffffff;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 24px;
-    font-weight: 400;
-    left: 142px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 15px;
-  }
-  
-  .login-page .field {
-    height: 69px;
-    left: 39px;
-    position: absolute;
-    top: 242px;
-    width: 350px;
-  }
-  
-  .login-page .overlap-2 {
-    height: 69px;
+/* Login.css */
+.floating-label {
     position: relative;
   }
   
-  .login-page .rectangle {
-    border: 1px solid;
-    border-color: #000000;
-    border-radius: 50px;
-    height: 60px;
-    left: 0;
+  .floating-label label {
     position: absolute;
-    top: 9px;
-    width: 350px;
+    top: -1rem;
+    left: 1rem;
+    padding: 0.25rem;
+    background-color: #fff;
+    color:black; /* Cor desejada */
+    pointer-events: none;
+    transition: all 0.2s ease;
   }
   
-  .login-page .titulo-field {
-    height: 19px;
-    left: 45px;
-    position: absolute;
-    top: 0;
-    width: 56px;
+  .floating-label .form-control {
+    padding: 1rem; /* Ajuste o tamanho do campo conforme necessário */
+    border: 1px solid #ced4da;
   }
   
-  .login-page .div-wrapper {
-    background-color: #ffffff;
-    height: 19px;
-    position: relative;
-    width: 54px;
+  .floating-label .form-control:focus + label,
+  .floating-label .form-control:not(:placeholder-shown) + label {
+    top: -1rem;
+    font-size: 0.75rem; /* Tamanho do rótulo flutuante */
   }
   
-  .login-page .text-wrapper-2 {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 16px;
-    font-weight: 400;
-    left: 3px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 0;
-    white-space: nowrap;
+  .custom-button {
+    width: 100%; /* Tornar o botão do mesmo tamanho do campo */
+    background-color: #9e933a; /* Cor desejada */
+    border-color: #9e933a; /* Cor da borda do botão */
   }
   
-  .login-page .overlap-wrapper {
-    height: 69px;
-    left: 39px;
-    position: absolute;
-    top: 146px;
-    width: 350px;
-  }
-  
-  .login-page .overlap-group-wrapper {
-    height: 19px;
-    left: 45px;
-    position: absolute;
-    top: 0;
-    width: 67px;
-  }
-  
-  .login-page .overlap-group-2 {
-    background-color: #ffffff;
-    height: 19px;
-    position: relative;
-    width: 65px;
-  }
-  
-  .login-page .text-wrapper-3 {
-    color: #000000;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 36px;
-    font-weight: 400;
-    left: 122px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 30px;
-  }
-  
-  .login-page .app-bar {
-    height: 104px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 1442px;
-  }
-  
-  .login-page .overlap-3 {
-    background-color: #9a86eb;
-    height: 104px;
-    position: relative;
-    width: 1440px;
-  }
-  
-  .login-page .text-wrapper-4 {
-    color: #ffffff;
-    font-family: "Inter-Regular", Helvetica;
-    font-size: 36px;
-    font-weight: 400;
-    left: 576px;
-    letter-spacing: 0;
-    line-height: normal;
-    position: absolute;
-    top: 30px;
+  .custom-button:hover {
+    background-color: #7f7232; /* Cor desejada ao passar o mouse */
+    border-color: #7f7232; /* Cor da borda do botão ao passar o mouse */
   }
   

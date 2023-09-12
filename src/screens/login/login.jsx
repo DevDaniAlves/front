@@ -1,47 +1,57 @@
-import React from "react";
-import "./login.css";
+import React, { useState } from "react";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import "./login.css"; // Importe o arquivo CSS
 
-function Login()  {
+function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Aqui você pode adicionar a lógica para autenticar o usuário
+  };
+
   return (
-    <div className="login-page">
-      <div className="div">
-        <div className="login">
-          <div className="overlap">
-            <div className="boto">
-              <div className="overlap-group">
-                <div className="text-wrapper">Login</div>
-              </div>
-            </div>
-            <div className="field">
-              <div className="overlap-2">
-                <div className="rectangle" />
-                <div className="titulo-field">
-                  <div className="div-wrapper">
-                    <div className="text-wrapper-2">Senha</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="overlap-wrapper">
-              <div className="overlap-2">
-                <div className="rectangle" />
-                <div className="overlap-group-wrapper">
-                  <div className="overlap-group-2">
-                    <div className="text-wrapper-2">Usuário</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="text-wrapper-3">Faça Login</div>
-          </div>
-        </div>
-        <div className="app-bar">
-          <div className="overlap-3">
-            <div className="text-wrapper-4">Seja Bem Vindo!!</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container>
+      <Row className="justify-content-center mt-5">
+        <Col xs={12} md={6}>
+          <Form onSubmit={handleSubmit} className="border p-4 rounded">
+            <Form.Group className="mb-3 floating-label">
+              <Form.Control
+                type="text"
+                placeholder=" "
+                value={username}
+                onChange={handleUsernameChange}
+                required
+              />
+              <Form.Label>Usuário</Form.Label>
+            </Form.Group>
+            <Form.Group className="mb-3 floating-label">
+              <Form.Control
+                type="password"
+                placeholder=" "
+                value={password}
+                onChange={handlePasswordChange}
+                required
+              />
+              <Form.Label>Senha</Form.Label>
+            </Form.Group>
+            <Button variant="primary" type="submit" className="custom-button">
+              Entrar
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
-};
-export default Login
+}
+
+export default Login;
