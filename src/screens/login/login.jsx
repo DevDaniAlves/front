@@ -20,10 +20,13 @@ function Login() {
   };
 
   return (
-    <Container>
-      <Row className="justify-content-center mt-5">
+    
+    <Container className="appContainer">
+      <Container fluid className="topBar"></Container>
+      <Row className="justify-content-center align-items-center vh-100">
         <Col xs={12} md={6}>
-          <Form onSubmit={handleSubmit} className="border p-4 rounded">
+          <Form onSubmit={handleSubmit} id="form" className="border p-4 rounded">
+            <h1 className="title">Faça Login</h1>
             <Form.Group className="mb-3 floating-label">
               <Form.Control
                 type="text"
@@ -48,6 +51,7 @@ function Login() {
               Entrar
             </Button>
           </Form>
+          
         </Col>
       </Row>
     </Container>
