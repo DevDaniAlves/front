@@ -8,7 +8,7 @@
     border: 0px;
   }
   .iconButton{
-    width: 12vw;
+    width: 128px;
   }
   .nav{
     background-color: #9A86EB;
@@ -17,7 +17,7 @@
 
 .label {
   text-align: center;
-  font-size: 12px;
+  font-size: 16px;
   margin-top: 4px;
 }
 .icon-with-label {
@@ -30,4 +30,5 @@
 .icon {
   background-color: transparent;
   color: white;
+  height: 24px;
 }

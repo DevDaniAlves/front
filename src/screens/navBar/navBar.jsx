@@ -2,7 +2,7 @@
 import React from "react";
 import { Navbar, Container, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faUser, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faDoorClosed, faScaleBalanced } from "@fortawesome/free-solid-svg-icons";
 import "./navBar.css"
 function MyNavbar() {
   return (
@@ -12,9 +12,11 @@ function MyNavbar() {
             <Button variant="light" className="mr-2">
               <Container className="iconButton">
               <FontAwesomeIcon
+                className="icon"
                 style = {{color: "white"}}
                 icon={faHome}
               />
+              
               <div className="label">Home</div>
               </Container>
               
@@ -22,19 +24,21 @@ function MyNavbar() {
             <Button variant="light" className="mr-2">
             <Container className="iconButton">
               <FontAwesomeIcon
-                icon={faUser}
+                className="icon"
+                icon={faDoorClosed}
                 style={{ color: "white"}}
               />
-              <div className="label">Usuário</div>
+              <div className="label">Salas</div>
               </Container>
             </Button>
             <Button variant="light" className="mr-2">
             <Container className="iconButton">
               <FontAwesomeIcon
-                icon={faCog}
+                className="icon"
+                icon={faScaleBalanced}
                 style = {{color: "white"}}
               />
-              <div className="label">Configurações</div>
+              <div className="label">Patrimônio</div>
               </Container>
             </Button>
           </div>
