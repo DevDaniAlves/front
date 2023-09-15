@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './patrimonio.css'
+import './salas.css'
 import MyNavbar from '../navBar/navBar';
 
 
@@ -18,7 +18,7 @@ function CustomToolbar() {
       </div>
       <Button className="addButton">
         <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
-        Adicionar Novo Item
+        Adicionar Nova Sala
       </Button>
     </GridToolbarContainer>
 
@@ -83,7 +83,7 @@ const rows = [
   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
-class PatrimonioPage extends Component {
+class SalasPage extends Component {
 
 
   render() {
@@ -117,4 +117,4 @@ class PatrimonioPage extends Component {
   }
 }
 
-export default PatrimonioPage;
+export default SalasPage;
