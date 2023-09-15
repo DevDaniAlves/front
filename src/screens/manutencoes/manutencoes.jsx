@@ -1,6 +1,5 @@
-
 import React, { Component } from 'react';
-import './patrimonio.css'
+import './manutencoes.css'
 import MyNavbar from '../navBar/navBar';
 
 
@@ -8,6 +7,7 @@ import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDe
 import { Button, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useParams } from 'react-router-dom';
 
 function CustomToolbar() {
   return (
@@ -84,15 +84,14 @@ const rows = [
   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
-class PatrimonioPage extends Component {
+function ManutencoesSalasPage() {
+    const { id } = useParams();
 
-
-  render() {
     return (
       <div>
 
         <MyNavbar />
-        <h1 className='title'>Lista de Itens</h1>
+        <h1 className='title'>Manutenções da Sala {id}</h1>
         <div className="container-xl">
           <div className="table-responsive">
             <DataGrid
@@ -116,6 +115,5 @@ class PatrimonioPage extends Component {
 
     );
   }
-}
 
-export default PatrimonioPage;
+export default ManutencoesSalasPage;
