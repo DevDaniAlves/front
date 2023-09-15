@@ -4,6 +4,9 @@ import MyNavbar from '../navBar/navBar';
 
 
 import { DataGrid } from '@mui/x-data-grid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Button, Col, Row } from 'react-bootstrap';
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -23,6 +26,23 @@ const columns = [
       width: 160,
       valueGetter: (params) =>
         `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    },
+    {
+      field: 'acao',
+      headerName: 'Ações',
+      
+      width: 500,
+      renderCell: ({ row }) => (
+        <Col>
+          <Button className='editButton'>
+          <FontAwesomeIcon className="editIcon" icon={faPencil} /> 
+        </Button>
+        <Button  className='deleteButton'>
+          <FontAwesomeIcon className="deleteIcon" icon={faTrash} />
+        </Button>
+        </Col>
+        
+      ),
     },
   ];
   
@@ -46,6 +66,9 @@ class PatrimonioPage extends Component {
                 <MyNavbar />
                 <div className="container-xl">
                     <div className="table-responsive">
+                      <div className='tableTitle'>
+                        <h1>Lista de Itens</h1>
+                      </div>
                     <DataGrid
         rows={rows}
         columns={columns}
