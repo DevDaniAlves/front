@@ -2,20 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Select from "react-select"; // Importe o componente Select
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-function CreateManutencaoSala() {
-  const [IdItem, setIdItem] = useState("");
-  const [ItemOptions, setItemOptions] = useState([]); // Opções para o dropdown de itens
-  const [Quantidade, setQuantidade] = useState(0); // Quantidade inicializada como 0
+function EditManutencaoSala() {
+  const [Quantidade, setQuantidade] = useState(0);
+  const [Resolvido, setResolvido] = useState(false); // Adicione o estado para 'Resolvido'
   const navigate = useNavigate();
-  const { id: IdSala } = useParams(); // Obtém o ID da sala dos parâmetros da URL
+  const { id: IdManutencao } = useParams(); // Obtém o ID da manutenção dos parâmetros da URL
+  const [IdItem, setIdItem] = useState(""); // Estado para armazenar o ID do item existente
 
   useEffect(() => {
-    // Buscar todas os itens disponíveis
-    async function fetchItens() {
+    async function fetchManutencao() {
       try {
         const token = localStorage.getItem("token");
         const config = {
@@ -24,51 +22,38 @@ function CreateManutencaoSala() {
             "Content-Type": "application/json",
           },
         };
-        const itemResponse = await axios.get(
-          "http://localhost:3000/item/getAll",
+        const manutencaoResponse = await axios.get(
+          `http://localhost:3000/manutencao/getById/${IdManutencao}`,
           config
         );
 
-        // Mapeie os dados de resposta para o formato esperado pelo react-select
-        const itemOptionsData = itemResponse.data.map((item) => ({
-          value: item.id,
-          label: item.nome_item,
-        }));
-
-        setItemOptions(itemOptionsData);
+        // Preencha os estados com os dados da manutenção existente
+        setIdItem(manutencaoResponse.data.id_item);
+        setQuantidade(manutencaoResponse.data.quantidade);
+        setResolvido(manutencaoResponse.data.resolvido);
       } catch (error) {
-        console.error("Erro ao buscar dados de itens:", error);
+        console.error("Erro ao buscar dados de manutenção:", error);
       }
     }
 
-    fetchItens();
-  }, []); // Execute isso apenas uma vez no carregamento inicial
-
-  const handleItemChange = (selectedOption) => {
-    setIdItem(selectedOption.value);
-  };
+    fetchManutencao();
+  }, [IdManutencao]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Formulário enviado");
-    console.log(IdItem, Quantidade)
-    // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!IdItem || Quantidade <= 0) {
+
+    if (Quantidade <= 0) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    // Construa o objeto JSON a ser enviado
     const manutencaoData = {
-      id_item: IdItem,
-      id_sala: IdSala,
       quantidade: Quantidade,
-      resolvido: false, // Definir 'resolvido' como false
+      resolvido: Resolvido, // Use o estado 'Resolvido'
     };
-    console.log(manutencaoData)
-    // Verifique se o ID já foi usado
+
     try {
-      // Se o ID for único, continue com o envio do formulário
       const token = localStorage.getItem("token");
       const config = {
         headers: {
@@ -76,23 +61,21 @@ function CreateManutencaoSala() {
           "Content-Type": "application/json",
         },
       };
-      const createResponse = await axios.post(
-        "http://localhost:3000/manutencao/create",
+      const updateResponse = await axios.put(
+        `http://localhost:3000/manutencao/update/${IdManutencao}`,
         manutencaoData,
         config
       );
 
-      if (!createResponse.data.error) {
-        // Se a resposta não contiver um erro
-        console.log(createResponse);
+      if (!updateResponse.data.error) {
+        console.log(updateResponse);
         navigate(-1);
       } else {
-        // Se a resposta contiver um erro, exiba a mensagem de erro em um alerta
-        alert("Erro ao Adicionar Manutenção à Sala: " + createResponse.data.error);
+        alert("Erro ao Atualizar Manutenção: " + updateResponse.data.error);
       }
     } catch (error) {
-      console.error("Erro ao criar a manutenção:", error);
-      alert("Erro ao Adicionar Manutenção à Sala: " + error.message);
+      console.error("Erro ao atualizar a manutenção:", error);
+      alert("Erro ao Atualizar Manutenção: " + error.message);
     }
   };
   const handleGoBack = () => {
@@ -115,15 +98,7 @@ function CreateManutencaoSala() {
             id="form"
             className="border p-4 rounded"
           >
-            <h1 className="title">Adicionar Manutenção à Sala</h1>
-            <Form.Group className="mb-3">
-              <label>Item</label>
-              <Select
-                options={ItemOptions}
-                value={ItemOptions.find((option) => option.value === IdItem)}
-                onChange={handleItemChange}
-              />
-            </Form.Group>
+            <h1 className="title">Editar Manutenção na Sala</h1>
             <Form.Group className="mb-3 floating-label">
               <Form.Control
                 type="number"
@@ -133,6 +108,17 @@ function CreateManutencaoSala() {
                 required
               />
               <Form.Label>Quantidade</Form.Label>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <label>Status</label>
+              <select
+                value={Resolvido ? "resolvido" : "a_resolver"}
+                onChange={(e) => setResolvido(e.target.value === "resolvido")}
+                className="form-select"
+              >
+                <option value="resolvido">Resolvido</option>
+                <option value="a_resolver">A Resolver</option>
+              </select>
             </Form.Group>
             <Button
               variant="primary"
@@ -144,7 +130,7 @@ function CreateManutencaoSala() {
                 borderColor: "#9e933a",
               }}
             >
-              Adicionar Manutenção
+              Atualizar Manutenção
             </Button>
           </Form>
         </Col>
@@ -153,4 +139,4 @@ function CreateManutencaoSala() {
   );
 }
 
-export default CreateManutencaoSala;
+export default EditManutencaoSala;

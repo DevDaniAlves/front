@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './patrimonio.css';
 import MyNavbar from '../navBar/navBar';
 import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
-import { Button, Col, Row, Modal } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams, useNavigate } from 'react-router-dom';
@@ -14,27 +14,23 @@ function PatrimonioSalaPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteItemId, setDeleteItemId] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { id } = useParams();
 
   function CustomToolbar() {
-    
     return (
-      <GridToolbarContainer >
+      <GridToolbarContainer>
         <div className="custom-toolbar">
           <GridToolbarColumnsButton className="columsButton" />
           <GridToolbarFilterButton className="filterButton" />
           <GridToolbarDensitySelector className="densityButton" />
         </div>
-        <Link className= "link"to={`/novoPatrimonio/${id}`}>
-        <Button className="addButton">
-          <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
-          Adicionar Novo Item
-        </Button>
+        <Link className="link" to={`/novoPatrimonio/${id}`}>
+          <Button className="addButton">
+            <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
+            Adicionar Novo Item
+          </Button>
         </Link>
-        
       </GridToolbarContainer>
-  
     );
   }
 
@@ -92,7 +88,7 @@ function PatrimonioSalaPage() {
             <Button onClick={() => handleDelete(params.row.id)} className='iconButton'>
               <FontAwesomeIcon className='deleteButton' icon={faTrash} />
             </Button>
-          </Row  >
+          </Row>
         )
       }
     }
@@ -103,33 +99,34 @@ function PatrimonioSalaPage() {
   };
 
   const handleDelete = (id) => {
-    setDeleteItemId(id);
-    setShowDeleteModal(true);
+    // Use window.confirm para solicitar confirmação
+    const confirmDelete = window.confirm('Tem certeza de que deseja excluir este item?');
+    if (confirmDelete) {
+      setDeleteItemId(id);
+      // Chame sua função de exclusão aqui se o usuário confirmar
+      deleteItem(id);
+    }
   };
 
-  const confirmDelete = () => {
-    if (deleteItemId) {
-      const token = localStorage.getItem("token");
-      const config = {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      };
-      
-      axios.delete(`http://localhost:3000/patrimonio_sala/delete/${deleteItemId}`, config)
-        .then(response => {
-          console.log('Item excluído com sucesso:', response);
-          setShowDeleteModal(false);
-          setDeleteItemId(null);
-          // Atualize a lista de itens após a exclusão bem-sucedida, se necessário.
-          reloadData(); // Recarrega os dados após a exclusão
-        })
-        .catch(error => {
-          console.error('Erro ao excluir o item:', error);
-          setShowDeleteModal(false);
-          setDeleteItemId(null);
-        });
-    }
+  const deleteItem = (id) => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    };
+
+    axios.delete(`http://localhost:3000/patrimonio_sala/delete/${id}`, config)
+      .then(response => {
+        console.log('Item excluído com sucesso:', response);
+        setDeleteItemId(null);
+        // Atualize a lista de itens após a exclusão bem-sucedida, se necessário.
+        reloadData(); // Recarrega os dados após a exclusão
+      })
+      .catch(error => {
+        console.error('Erro ao excluir o item:', error);
+        setDeleteItemId(null);
+      });
   };
 
   return (
@@ -153,23 +150,6 @@ function PatrimonioSalaPage() {
           )}
         </div>
       </div>
-
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmar Exclusão</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Tem certeza de que deseja excluir este item?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Cancelar
-          </Button>
-          <Button variant="danger" onClick={confirmDelete}>
-            Excluir
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 }

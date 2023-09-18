@@ -51,10 +51,10 @@ function EditSala() {
     console.log("Formulário enviado");
 
     const salaData = {
-      Capacidade: capacidade,
-      Localizacao: localizacao,
-      Responsavel: responsavel,
-      Tamanho: tamanho,
+      capacidade: capacidade,
+      localizacao: localizacao,
+      responsavel: responsavel,
+      tamanho: tamanho,
     };
 
     try {

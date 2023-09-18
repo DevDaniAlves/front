@@ -15,78 +15,59 @@ function CustomToolbar() {
   return (
     <GridToolbarContainer >
       <div className="custom-toolbar">
-      <GridToolbarColumnsButton className="columsButton" />
-      <GridToolbarFilterButton className="filterButton" />
-      <GridToolbarDensitySelector className="densityButton" />
+        <GridToolbarColumnsButton className="columsButton" />
+        <GridToolbarFilterButton className="filterButton" />
+        <GridToolbarDensitySelector className="densityButton" />
       </div>
     </GridToolbarContainer>
 
   );
 }
-const handleEdit = (id) => {
-  // Lógica de edição aqui
-  console.log(`Editar item com ID ${id}`);
-};
-const handleDelete = (id) => {
-  // Lógica de edição aqui
-  console.log(`Deletar item com ID ${id}`);
-};
-const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'capacidade', headerName: 'Capacidade', width: 130, type: 'number' },
-  { field: 'responsavel', headerName: 'Responsável', width: 130 },
-  {
-    field: 'localizacao',
-    headerName: 'Localização',
-    width: 150,
-  },
-  {
-    field: 'mat_disp',
-    headerName: 'Matutino Livre',
-    width: 120,
-    valueFormatter: (params) => (params.value ? 'Disponível' : 'Ocupado'),
-  },
-  {
-    field: 'vesp_disp',
-    headerName: 'Vespertino Livre',
-    width: 120,
-    valueFormatter: (params) => (params.value ? 'Disponível' : 'Ocupado'),
-  },
-  {
-    field: 'not_disp',
-    headerName: 'Noturno Livre',
-    width: 120,
-    valueFormatter: (params) => (params.value ? 'Disponível' : 'Ocupado'),
-  },
-  {
-    field: "tamanho",
-    headerName: "Tamanho",
-    type: 'number'
-  },
-  {
-    field: 'acoes',
-    headerName: "Ações",
-    sortable: false,
-    filterable: false,
-    width: 200,
-    renderCell: (params) => {
-      return (
-        <Row>
-          <Button onClick={() => handleEdit(params.row.id)} className='iconButton'>
-            <FontAwesomeIcon className='editButton' icon={faPencil} />
-          </Button>
-          <Button onClick={() => handleDelete(params.row.id)} className='iconButton'>
-            <FontAwesomeIcon className='deleteButton' icon={faTrash} />
-          </Button>
-        </Row>
-      )
-    }
-  }
-];
 
 function InformacoesPage() {
-const { id } = useParams();
+
+
+  const { id } = useParams();
   const navigate = useNavigate();
+  const handleEdit = (id) => {
+    // Lógica de edição aqui
+    navigate(`/editarSala/${id}`)
+  };
+  const handleDelete = (id) => {
+    // Lógica de edição aqui
+    console.log(`Deletar item com ID ${id}`);
+  };
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'capacidade', headerName: 'Capacidade', width: 130, type: 'number' },
+    { field: 'responsavel', headerName: 'Responsável', width: 130 },
+    {
+      field: 'localizacao',
+      headerName: 'Localização',
+      width: 150,
+    },
+    {
+      field: "tamanho",
+      headerName: "Tamanho",
+      type: 'number'
+    },
+    {
+      field: 'acoes',
+      headerName: "Ações",
+      sortable: false,
+      filterable: false,
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <Row>
+            <Button onClick={() => handleEdit(params.row.id)} className='iconButton'>
+              <FontAwesomeIcon className='editButton' icon={faPencil} />
+            </Button>
+          </Row>
+        )
+      }
+    }
+  ];
 
   const handleRowClick = (params) => {
     const id = params.row.id; // Assumindo que o ID da sala está na coluna 'id'
@@ -102,7 +83,7 @@ const { id } = useParams();
         'Authorization': `Bearer ${token}`
       }
     };
-  
+
     // Fazendo a solicitação GET para obter os detalhes da sala
     axios.get(`http://localhost:3000/sala/getById/${id}`, config)
       .then(response => {
@@ -114,18 +95,18 @@ const { id } = useParams();
         setLoading(false); // Set loading as false even in case of an error
       });
   }, [id]);
-  
 
 
-  
-    return (
-      
-      <div>
 
-        <MyNavbar />
-        <h1 className='title'>Informações Sala {id}</h1>
-        <div className="container-xl">
-          <div className="table-responsive">
+
+  return (
+
+    <div>
+
+      <MyNavbar />
+      <h1 className='title'>Informações Sala {id}</h1>
+      <div className="container-xl">
+        <div className="table-responsive">
           {loading ? ( // Verifica se está carregando
             <CircularProgress size={80} style={{ margin: 'auto', display: 'block' }} />
           ) : (
@@ -133,7 +114,6 @@ const { id } = useParams();
               checkboxSelection={false}
               rows={rooms ? [rooms] : []}
               columns={columns}
-              onRowClick={handleRowClick}
               initialState={{
                 pagination: {
                   paginationModel: { page: 0, pageSize: 5 },
@@ -145,12 +125,12 @@ const { id } = useParams();
               pageSizeOptions={[5, 10]}
             />
           )}
-          </div>
         </div>
       </div>
+    </div>
 
-    );
-  }
+  );
+}
 
 
 export default InformacoesPage;

@@ -3,6 +3,8 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Select from "react-select"; // Importe o componente Select
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function CreateSalaTurma() {
   const [IdTurma, setIdTurma] = useState("");
@@ -64,7 +66,7 @@ function CreateSalaTurma() {
         // Mapeie os dados da sala para o formato esperado pelo react-select
         const salaOptionData = {
           value: salaResponse.data.id,
-          label: salaResponse.data.id,
+          label: id,
         };
 
         setSalaOptions([salaOptionData]);
@@ -129,10 +131,18 @@ function CreateSalaTurma() {
       }
       
   };
-
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   return (
     <Container className="appContainer">
-      <Container fluid className="topBar"></Container>
+      <Container fluid className="topBar d-flex justify-content-start align-items-center">
+        <FontAwesomeIcon
+          icon={faArrowLeft}
+          className="back-icon text-white"
+          onClick={handleGoBack}
+          size="2x"
+        /></Container>
       <Row className="justify-content-center align-items-center vh-100">
         <Col xs={12} md={6}>
           <Form
