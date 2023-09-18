@@ -67,3 +67,7 @@
   .addIcon{
     margin-right: 3%;
   }
+  .link{
+    color: transparent;
+    width: 50vw;
+  }

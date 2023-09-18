@@ -1,26 +1,50 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import "./login.css"; // Importe o arquivo CSS
+import "./login.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Importe useNavigate para realizar o redirecionamento
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [name, setname] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // Inicialize o useNavigate
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handlenameChange = (e) => {
+    setname(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica para autenticar o usuário
+
+    try {
+      
+      axios.post('http://localhost:3000/user/sigin',
+      {
+        name,
+        password
+      }) // Substitua pela URL da sua API
+      .then(response => {
+       const token =  (response.data.accessToken); // Define o estado com os dados da resposta
+        console.log(token)
+        localStorage.setItem("token", token);
+        navigate("/home")
+      })
+      .catch(error => {
+        console.error('Erro ao buscar as salas:', error);
+      
+      });
+
+      
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+    }
   };
 
   return (
-    
     <Container className="appContainer">
       <Container fluid className="topBar"></Container>
       <Row className="justify-content-center align-items-center vh-100">
@@ -31,8 +55,8 @@ function Login() {
               <Form.Control
                 type="text"
                 placeholder=" "
-                value={username}
-                onChange={handleUsernameChange}
+                value={name}
+                onChange={handlenameChange}
                 required
               />
               <Form.Label>Usuário</Form.Label>
@@ -51,7 +75,6 @@ function Login() {
               Entrar
             </Button>
           </Form>
-          
         </Col>
       </Row>
     </Container>

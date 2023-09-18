@@ -28,5 +28,25 @@
   color: white;
   height: 24px;
   text-align: center;
-  margin-right: 8%;/* Centralize horizontalmente o ícone */
+  margin-right: 0.4vw;/* Centralize horizontalmente o ícone */
 }
+/* Estilos para os botões da navegação */
+.nav-button {
+  text-decoration: none;
+  margin-right: 10px;
+  background-color: transparent !important; /* Fundo transparente para todos os botões */
+  border: none !important; /* Remover a borda dos botões */
+}
+
+/* Estilos para o botão ativo */
+.nav-button.active-button .icon {
+  color: black; /* Cor do ícone do botão ativo */
+}
+
+.nav-button.active-button .label {
+  color: black; /* Cor do rótulo do botão ativo */
+}
+.nav-button:hover {
+  background-color: transparent !important;
+}
+

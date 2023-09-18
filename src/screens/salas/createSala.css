@@ -1,0 +1,57 @@
+.floating-label {
+    position: relative;
+    background-color: transparent;
+    color: transparent;
+  }
+  
+  .floating-label label {
+    position: absolute;
+    top: -1rem;
+    left: 1rem;
+    padding: 0.25rem;
+    background-color: transparent;
+    color: black; /* Cor desejada */
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+  
+  .floating-label .form-control {
+    padding: 1rem; /* Ajuste o tamanho do campo conforme necessário */
+    border: 1px solid #ced4da;
+  }
+  
+  .floating-label .form-control:focus + label,
+  .floating-label .form-control:not(:placeholder-shown) + label {
+    top: -1rem;
+    font-size: 0.75rem; /* Tamanho do rótulo flutuante */
+  }
+  
+  .custom-button {
+    width: 100%; /* Tornar o botão do mesmo tamanho do campo */
+    background-color: #9e933a; /* Cor desejada */
+    border-color: #9e933a; /* Cor da borda do botão */
+  }
+  
+  .custom-button:hover {
+    background-color: #7f7232; /* Cor desejada ao passar o mouse */
+    border-color: #7f7232; /* Cor da borda do botão ao passar o mouse */
+  }
+  
+  .title {
+    margin-bottom: 12%;
+    text-align: center;
+  }
+  
+  .topBar {
+    background-color: #9A86EB;
+    height: 7vh; /* Altura da top bar */
+    width: 100%; /* Largura total da tela */
+    position: fixed; /* Fixe a top bar no topo da tela */
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  
+  #form {
+    justify-content: center;
+  }
