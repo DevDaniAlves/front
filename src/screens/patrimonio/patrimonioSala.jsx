@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './patrimonio.css';
 import MyNavbar from '../navBar/navBar';
 import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams, useNavigate } from 'react-router-dom';
@@ -85,7 +85,7 @@ function PatrimonioSalaPage() {
             <Button onClick={() => handleEdit(params.row.id)} className='iconButton'>
               <FontAwesomeIcon className='editButton' icon={faPencil} />
             </Button>
-            <Button onClick={() => handleDelete(params.row.id)} className='iconButton'>
+            <Button onClick={() => handleShowDeleteModal(params.row.id)} className='iconButton'>
               <FontAwesomeIcon className='deleteButton' icon={faTrash} />
             </Button>
           </Row>
@@ -98,17 +98,18 @@ function PatrimonioSalaPage() {
     navigate(`/editarPatrimonioSala/${id}`);
   };
 
-  const handleDelete = (id) => {
-    // Use window.confirm para solicitar confirmação
-    const confirmDelete = window.confirm('Tem certeza de que deseja excluir este item?');
-    if (confirmDelete) {
-      setDeleteItemId(id);
-      // Chame sua função de exclusão aqui se o usuário confirmar
-      deleteItem(id);
-    }
+  const handleShowDeleteModal = (id) => {
+    setDeleteItemId(id);
   };
 
-  const deleteItem = (id) => {
+  const handleCloseDeleteModal = () => {
+    setDeleteItemId(null);
+  };
+
+  const handleConfirmDelete = () => {
+    const idToDelete = deleteItemId;
+    handleCloseDeleteModal();
+
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -116,16 +117,14 @@ function PatrimonioSalaPage() {
       }
     };
 
-    axios.delete(`http://localhost:3000/patrimonio_sala/delete/${id}`, config)
+    axios.delete(`http://localhost:3000/patrimonio_sala/delete/${idToDelete}`, config)
       .then(response => {
         console.log('Item excluído com sucesso:', response);
-        setDeleteItemId(null);
         // Atualize a lista de itens após a exclusão bem-sucedida, se necessário.
         reloadData(); // Recarrega os dados após a exclusão
       })
       .catch(error => {
         console.error('Erro ao excluir o item:', error);
-        setDeleteItemId(null);
       });
   };
 
@@ -150,6 +149,21 @@ function PatrimonioSalaPage() {
           )}
         </div>
       </div>
+
+      <Modal show={!!deleteItemId} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmação de Exclusão</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Tem certeza de que deseja excluir este item?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

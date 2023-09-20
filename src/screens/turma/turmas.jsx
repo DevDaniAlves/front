@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './turma.css'
 import MyNavbar from '../navBar/navBar';
 import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
-import { Button, Row } from 'react-bootstrap';
+import { Button, Row, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -20,21 +20,20 @@ function CustomToolbar() {
       <Link className="link" to="/novaTurma">
         <Button  className="addButton">
           <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
-          Adicionar Nova Sala
+          Adicionar Nova Turma
         </Button>
       </Link>
     </GridToolbarContainer>
   );
 }
 
-
-
 function TurmasPage() {
-
-  
+  const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const config = {
@@ -43,46 +42,50 @@ function TurmasPage() {
       },
     };
 
-    // Fazendo a solicitação GET para obter a lista de salas
     axios.get('http://localhost:3000/turma/getAll', config)
       .then(response => {
         setRooms(response.data);
         setLoading(false);
       })
       .catch(error => {
-        console.error('Erro ao buscar as salas:', error);
+        console.error('Erro ao buscar as turmas:', error);
         setLoading(false);
       });
   }, []);
 
   const handleEdit = (id) => {
-    // Navegue para a página de edição
     navigate(`/editarTurma/${id}`);
-    console.log("oi")
   };
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm('Tem certeza de que deseja excluir esta sala?');
 
-    if (confirmDelete) {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+  const handleShowDeleteModal = (id) => {
+    setShowDeleteModal(true);
+    setDeleteItemId(id);
+  };
 
-      // Lógica de exclusão aqui
-      axios.delete(`http://localhost:3000/turma/delete/${id}`, config)
-        .then((response) => {
-          console.log('Sala excluída com sucesso!', response);
-          // Atualize a lista de salas após a exclusão
-          const updatedRooms = rooms.filter(room => room.id !== id);
-          setRooms(updatedRooms);
-        })
-        .catch((error) => {
-          console.error('Erro ao excluir a sala:', error);
-        });
-    }
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setDeleteItemId(null);
+  };
+
+  const handleConfirmDelete = () => {
+    handleCloseDeleteModal();
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    axios
+      .delete(`http://localhost:3000/turma/delete/${deleteItemId}`, config)
+      .then((response) => {
+        console.log('Turma excluída com sucesso!', response);
+        const updatedRooms = rooms.filter((room) => room.id !== deleteItemId);
+        setRooms(updatedRooms);
+      })
+      .catch((error) => {
+        console.error('Erro ao excluir a turma:', error);
+      });
   };
 
   const columns = [
@@ -106,7 +109,7 @@ function TurmasPage() {
             <Button onClick={() => handleEdit(params.row.id)} className='iconButton'>
               <FontAwesomeIcon className='editButton' icon={faPencil} />
             </Button>
-            <Button onClick={() => handleDelete(params.row.id)} className='iconButton'>
+            <Button onClick={() => handleShowDeleteModal(params.row.id)} className='iconButton'>
               <FontAwesomeIcon className='deleteButton' icon={faTrash} />
             </Button>
           </Row>
@@ -141,6 +144,21 @@ function TurmasPage() {
           )}
         </div>
       </div>
+
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmação de Exclusão</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Tem certeza de que deseja excluir esta turma? (TODOS OS RELACIONAMENTOS DELE SERÃO APAGADOS) </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

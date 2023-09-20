@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './salas.css'
 import MyNavbar from '../navBar/navBar';
-
-
 import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
-import { Button, Row } from 'react-bootstrap';
+import { Button, Row, Modal, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
@@ -15,54 +13,27 @@ function CustomToolbar() {
   return (
     <GridToolbarContainer >
       <div className="custom-toolbar">
-      <GridToolbarColumnsButton className="columsButton" />
-      <GridToolbarFilterButton className="filterButton" />
-      <GridToolbarDensitySelector className="densityButton" />
+        <GridToolbarColumnsButton className="columsButton" />
+        <GridToolbarFilterButton className="filterButton" />
+        <GridToolbarDensitySelector className="densityButton" />
       </div>
       <Link className="link" to="/novaSala">
-      <Button  className="addButton">
-        <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
-        Adicionar Nova Sala
-      </Button>
+        <Button  className="addButton">
+          <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
+          Adicionar Nova Sala
+        </Button>
       </Link>
-      
     </GridToolbarContainer>
-
   );
 }
 
-
 function SalasPage() {
   const navigate = useNavigate();
-  const handleEdit = (id) => {
-    // Lógica de edição aqui
-    navigate(`/editarSala/${id}`);
-  };
-  const handleDelete = (id) => {
-    
-    const confirmDelete = window.confirm('Tem certeza de que deseja excluir esta sala?');
-  
-    if (confirmDelete) {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-  
-      // Fazendo a solicitação DELETE para excluir a sala com o ID fornecido
-      axios.delete(`http://localhost:3000/sala/delete/${id}`, config)
-        .then((response) => {
-          console.log('Sala excluída com sucesso!', response);
-          // Atualize a lista de salas após a exclusão
-          const updatedRooms = rooms.filter(room => room.id !== id);
-          setRooms(updatedRooms);
-        })
-        .catch((error) => {
-          console.error('Erro ao excluir a sala:', error);
-        });
-    }
-  };
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'capacidade', headerName: 'Capacidade', width: 130, type: 'number' },
@@ -106,7 +77,7 @@ function SalasPage() {
           <Row>
             <Button
               onClick={(e) => {
-                e.stopPropagation(); // Impede a propagação do evento de clique
+                e.stopPropagation();
                 handleEdit(params.row.id);
               }}
               className='iconButton'
@@ -115,8 +86,8 @@ function SalasPage() {
             </Button>
             <Button
               onClick={(e) => {
-                e.stopPropagation(); // Impede a propagação do evento de clique
-                handleDelete(params.row.id);
+                e.stopPropagation();
+                handleShowDeleteModal(params.row.id);
               }}
               className='iconButton'
             >
@@ -127,67 +98,73 @@ function SalasPage() {
       },
     }
   ];
-  
 
-  const handleRowClick = (params) => {
-    const id = params.row.id; // Assumindo que o ID da sala está na coluna 'id'
-    navigate(`/sala/${id}`);
+  const handleEdit = (id) => {
+    navigate(`/editarSala/${id}`);
   };
-  const [rooms, setRooms] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const handleShowDeleteModal = (id) => {
+    setShowDeleteModal(true);
+    setDeleteItemId(id);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setDeleteItemId(null);
+  };
+
+  const handleConfirmDelete = () => {
+    handleCloseDeleteModal();
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    axios
+      .delete(`http://localhost:3000/sala/delete/${deleteItemId}`, config)
+      .then((response) => {
+        console.log('Sala excluída com sucesso!', response);
+        const updatedRooms = rooms.filter((room) => room.id !== deleteItemId);
+        setRooms(updatedRooms);
+      })
+      .catch((error) => {
+        console.error('Erro ao excluir a sala:', error);
+      });
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
-        'Authorization': `Bearer ${token}` // Adicione o cabeçalho de autorização com o token Bearer
+        'Authorization': `Bearer ${token}`
       }
     };
-    // Fazendo a solicitação GET para obter a lista de salas
-    axios.get('http://localhost:3000/sala/getAll', config) // Substitua pela URL da sua API
+
+    axios.get('http://localhost:3000/sala/getAll', config)
       .then(response => {
-        setRooms(response.data); // Define o estado com os dados da resposta
-        console.log(rooms)
-        setLoading(false); // Define loading como false para indicar que os dados foram carregados
+        setRooms(response.data);
+        setLoading(false);
       })
       .catch(error => {
         console.error('Erro ao buscar as salas:', error);
-        setLoading(false); // Mesmo em caso de erro, definimos loading como false para evitar um loop infinito de solicitações
+        setLoading(false);
       });
   }, []);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    // Initialize form fields here
-    // For example:
-    nome: '',
-    capacidade: 0,
-    localizacao: '',
-    // Add other fields as needed
-  });
-
-  // Step 2: Function to handle modal opening
-  
-
-  // Function to handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission, e.g., send data to the server
-    // Then close the modal
-    setIsModalOpen(false);
+  const handleRowClick = (params) => {
+    const id = params.row.id;
+    navigate(`/sala/${id}`);
   };
 
-  
-  
-    return (
-      
-      <div>
-
-        <MyNavbar />
-        <h1 className='title'>Lista de Salas</h1>
-        <div className="container-xl">
-          <div className="table-responsive">
-          {loading ? ( // Verifica se está carregando
+  return (
+    <div>
+      <MyNavbar />
+      <h1 className='title'>Lista de Salas</h1>
+      <div className="container-xl">
+        <div className="table-responsive">
+          {loading ? (
             <CircularProgress size={80} style={{ margin: 'auto', display: 'block' }} />
           ) : (
             <DataGrid
@@ -206,12 +183,25 @@ function SalasPage() {
               pageSizeOptions={[5, 10]}
             />
           )}
-          </div>
         </div>
       </div>
 
-    );
-  }
-
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmação de Exclusão</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Tem certeza de que deseja excluir esta sala? (TODOS OS RELACIONAMENTOS DELE SERÃO APAGADOS)</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+}
 
 export default SalasPage;

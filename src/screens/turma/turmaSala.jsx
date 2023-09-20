@@ -3,72 +3,62 @@ import './turma.css'
 import MyNavbar from '../navBar/navBar';
 
 import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from '@mui/x-data-grid';
-import { Button, Row } from 'react-bootstrap';
+import { Button, Row, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencil, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
+
+function CustomToolbar({ id }) {
+  return (
+    <GridToolbarContainer >
+      <div className="custom-toolbar">
+        <GridToolbarColumnsButton className="columsButton" />
+        <GridToolbarFilterButton className="filterButton" />
+        <GridToolbarDensitySelector className="densityButton" />
+      </div>
+      <Link className="link" to={`/novaSalaTurma/${id}`}>
+        <Button className="addButton">
+          <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
+          Adicionar Nova Turma na Sala
+        </Button>
+      </Link>
+    </GridToolbarContainer>
+  );
+}
 
 function TurmaSalaPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm('Tem certeza de que deseja excluir esta sala?');
+    setShowDeleteModal(true);
+    setDeleteItemId(id);
+  };
 
-    if (confirmDelete) {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      axios.get(`http://localhost:3000/sala_recebe_turma/getbyId/${id}`, config)
+  const handleConfirmDelete = () => {
+    setShowDeleteModal(false);
+    const token = localStorage.getItem('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    axios.delete(`http://localhost:3000/sala_recebe_turma/delete/${deleteItemId}`, config)
       .then((response) => {
-        console.log(response.data)
-        const salaId = response.data.id_sala; // Supondo que o ID da sala esteja em response.data.sala.id
-        const turno = response.data.turno;
-        console.log(salaId)
-        // Defina a variável para o turno com base no valor do turno encontrado
-        let turnoToUpdate = {};
-
-        if (turno === 1) {
-          turnoToUpdate = { mat_disp: true };
-        } else if (turno === 2) {
-          turnoToUpdate = { vesp_disp: true };
-        } else if (turno === 3) {
-          turnoToUpdate = { not_disp: true };
-        }
-
-        // Agora, faça a atualização da sala apenas para o campo correspondente ao turno encontrado
-        axios.put(`http://localhost:3000/sala/update/${salaId}`, turnoToUpdate, config)
-          .then((response) => {
-            console.log('Turno da sala atualizado com sucesso!', response);
-          })
-          .catch((error) => {
-            console.error('Erro ao atualizar o turno da sala:', error);
-          });
+        console.log('Turma da sala excluída com sucesso!', response);
+        // Atualize a lista de turmas da sala após a exclusão
+        const updatedItems = items.filter(item => item.id !== deleteItemId);
+        setItems(updatedItems);
       })
       .catch((error) => {
-        console.error('Erro ao buscar o ID da sala:', error);
+        console.error('Erro ao excluir a turma da sala:', error);
       });
-      // Lógica de exclusão aqui
-      axios.delete(`http://localhost:3000/sala_recebe_turma/delete/${id}`, config)
-        .then((response) => {
-          console.log('Sala excluída com sucesso!', response);
-          // Atualize a lista de salas após a exclusão
-          const updatedRooms = items.filter(room => room.id !== id);
-          setItems(updatedRooms);
-
-          // Agora, vamos buscar o ID da sala na API sala_recebe_turma
-          
-        })
-        .catch((error) => {
-          console.error('Erro ao excluir a sala:', error);
-        });
-    }
   };
 
   const columns = [
@@ -98,26 +88,6 @@ function TurmaSalaPage() {
     }
   ];
 
-  function CustomToolbar() {
-    return (
-      <GridToolbarContainer >
-        <div className="custom-toolbar">
-          <GridToolbarColumnsButton className="columsButton" />
-          <GridToolbarFilterButton className="filterButton" />
-          <GridToolbarDensitySelector className="densityButton" />
-        </div>
-        <Link className="link" to={`/novaSalaTurma/${id}`}>
-          <Button className="addButton">
-            <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
-            Adicionar Nova Turma na Sala
-          </Button>
-        </Link>
-
-      </GridToolbarContainer>
-
-    );
-  }
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     const config = {
@@ -140,7 +110,7 @@ function TurmaSalaPage() {
         setLoading(false);
       })
       .catch(error => {
-        console.error('Erro ao buscar os itens:', error);
+        console.error('Erro ao buscar as turmas da sala:', error);
         setLoading(false);
       });
   }, [id]);
@@ -160,13 +130,28 @@ function TurmaSalaPage() {
               columns={columns}
               pageSizeOptions={[5, 10]}
               components={{
-                Toolbar: CustomToolbar,
+                Toolbar: () => <CustomToolbar id={id} />,
               }}
             />
           )}
 
         </div>
       </div>
+
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmação de Exclusão</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Tem certeza de que deseja excluir esta turma da sala?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDelete}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
