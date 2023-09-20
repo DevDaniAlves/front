@@ -80,18 +80,18 @@ function CreatePatrimonio() {
   }, [id]); // Execute isso sempre que o id dos parâmetros mudar
 
   const handleSubmit = async (e) => {
-    const {id} = useParams() 
     e.preventDefault();
     console.log("Formulário enviado");
+
     // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!IdItem || !IdSala || !Quantidade) {
+    if (!IdItem || !Quantidade) {
       alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    // Verifique se o ID já foi usado
+    // O ID da sala já está definido como o valor recebido dos parâmetros
     try {
-      // Se o ID for único, continue com o envio do formulário
+      // Continue com o envio do formulário
       const token = localStorage.getItem("token");
       const config = {
         headers: {
@@ -103,7 +103,7 @@ function CreatePatrimonio() {
         "http://localhost:3000/patrimonio_sala/create",
         {
           id_item: IdItem,
-          id_sala: id,
+          id_sala: id, // Use o id dos parâmetros diretamente aqui
           quantidade: Quantidade,
         },
         config
@@ -115,6 +115,7 @@ function CreatePatrimonio() {
       console.error("Erro ao criar o patrimônio:", error);
     }
   };
+
   const handleGoBack = () => {
     navigate(-1);
   };
@@ -143,7 +144,7 @@ function CreatePatrimonio() {
                 onChange={(selectedOption) => setIdItem(selectedOption.value)}
               />
             </Form.Group>
-            
+  
             <Form.Group className="mb-3 floating-label">
               <Form.Control
                 type="text"
