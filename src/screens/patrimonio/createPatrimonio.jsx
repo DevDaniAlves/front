@@ -80,6 +80,7 @@ function CreatePatrimonio() {
   }, [id]); // Execute isso sempre que o id dos parâmetros mudar
 
   const handleSubmit = async (e) => {
+    const {id} = useParams() 
     e.preventDefault();
     console.log("Formulário enviado");
     // Verifique se todos os campos obrigatórios estão preenchidos
@@ -102,7 +103,7 @@ function CreatePatrimonio() {
         "http://localhost:3000/patrimonio_sala/create",
         {
           id_item: IdItem,
-          id_sala: IdSala,
+          id_sala: id,
           quantidade: Quantidade,
         },
         config
@@ -142,14 +143,7 @@ function CreatePatrimonio() {
                 onChange={(selectedOption) => setIdItem(selectedOption.value)}
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <label>Sala</label>
-              <Select
-                options={salaOptions}
-                value={salaOptions.find((option) => option.value === IdSala)}
-                onChange={(selectedOption) => setIdSala(selectedOption.value)}
-              />
-            </Form.Group>
+            
             <Form.Group className="mb-3 floating-label">
               <Form.Control
                 type="text"
