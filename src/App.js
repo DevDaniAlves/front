@@ -29,6 +29,7 @@ import EditTurma from './screens/turma/editTurma';
 import EditSala from './screens/salas/editSala';
 import EditPatrimonioSala from './screens/patrimonio/editPatrimonioSala';
 import EditManutencaoSala from './screens/manutencoes/editManutencao';
+import SalasDisponiveisPage from './screens/salas/salas_disponiveis';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
           <Route index path="/editarSala/:id" element={<EditSala/>} />
           <Route index path="/editarPatrimonioSala/:id" element={<EditPatrimonioSala/>} />
           <Route index path="/editarManutencaoSala/:id" element={<EditManutencaoSala/>} />
+          <Route index path="/salas_disponiveis" element={<SalasDisponiveisPage/>} />
         </Route>
      
       

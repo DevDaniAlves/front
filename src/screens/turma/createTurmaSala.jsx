@@ -37,12 +37,15 @@ function CreateSalaTurma() {
         }));
 
         setTurmaOptions(turmaOptionsData);
+        
       } catch (error) {
         console.error("Erro ao buscar dados de turmas:", error);
       }
     }
 
     fetchTurmas();
+    console.log(TurmaOptions)
+    
   }, []); // Execute isso apenas uma vez no carregamento inicial
 
   const handleTurmaChange = (selectedOption) => {
