@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Select from "react-select"; // Importe o componente Select
+import Select from "react-select";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function CreateManutencaoSala() {
   const [IdItem, setIdItem] = useState("");
-  const [ItemOptions, setItemOptions] = useState([]); // Opções para o dropdown de itens
-  const [Quantidade, setQuantidade] = useState(0); // Quantidade inicializada como 0
+  const [ItemOptions, setItemOptions] = useState([]);
+  const [Quantidade, setQuantidade] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState("");
   const navigate = useNavigate();
-  const { id: IdSala } = useParams(); // Obtém o ID da sala dos parâmetros da URL
+  const { id: IdSala } = useParams();
 
   useEffect(() => {
-    // Buscar todas os itens disponíveis
     async function fetchItens() {
       try {
         const token = localStorage.getItem("token");
@@ -24,25 +25,62 @@ function CreateManutencaoSala() {
             "Content-Type": "application/json",
           },
         };
+    
+        // Busque todos os itens disponíveis
         const itemResponse = await axios.get(
           "http://localhost:3000/item/getAll",
           config
         );
-
+        async function fetchItensAssociados(IdSala) {
+          try {
+            const token = localStorage.getItem("token");
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            };
+        
+            // Substitua "localhost:3000/sua-api/itens-associados" pelo endpoint correto
+            const response = await axios.get(
+              `http://localhost:3000/manutencao/sala/${IdSala}`,
+              config
+            );
+        
+            return response.data; // Retorne os itens associados à sala
+          } catch (error) {
+            console.error("Erro ao buscar itens associados:", error);
+            return []; // Retorne um array vazio em caso de erro
+          }
+        }
+        
+    
+        // Busque os itens já associados à sala
+        const itensAssociadosResponse = await fetchItensAssociados(IdSala);
+    
         // Mapeie os dados de resposta para o formato esperado pelo react-select
         const itemOptionsData = itemResponse.data.map((item) => ({
           value: item.id,
           label: item.nome_item,
         }));
-
-        setItemOptions(itemOptionsData);
+    
+        // Mapeie os itens já associados para obter seus IDs
+        const itensAssociadosIds = itensAssociadosResponse.data.map((item) => item.id_item);
+    
+        // Filtrar itens disponíveis para remover aqueles já associados
+        const itensDisponiveis = itemOptionsData.filter((item) => {
+          return !itensAssociadosIds.includes(item.value);
+        });
+    
+        setItemOptions(itensDisponiveis);
       } catch (error) {
         console.error("Erro ao buscar dados de itens:", error);
       }
     }
+    
 
     fetchItens();
-  }, []); // Execute isso apenas uma vez no carregamento inicial
+  }, []);
 
   const handleItemChange = (selectedOption) => {
     setIdItem(selectedOption.value);
@@ -50,25 +88,21 @@ function CreateManutencaoSala() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Formulário enviado");
-    console.log(IdItem, Quantidade)
-    // Verifique se todos os campos obrigatórios estão preenchidos
+
     if (!IdItem || Quantidade <= 0) {
-      alert("Por favor, preencha todos os campos obrigatórios.");
+      setModalContent("Todos os campos são obrigatórios.");
+      setShowModal(true);
       return;
     }
 
-    // Construa o objeto JSON a ser enviado
     const manutencaoData = {
       id_item: IdItem,
       id_sala: IdSala,
       quantidade: Quantidade,
-      resolvido: false, // Definir 'resolvido' como false
+      resolvido: false,
     };
-    console.log(manutencaoData)
-    // Verifique se o ID já foi usado
+
     try {
-      // Se o ID for único, continue com o envio do formulário
       const token = localStorage.getItem("token");
       const config = {
         headers: {
@@ -83,21 +117,52 @@ function CreateManutencaoSala() {
       );
 
       if (!createResponse.data.error) {
-        // Se a resposta não contiver um erro
-        console.log(createResponse);
-        navigate(-1);
+        setModalContent("Manutenção criada com sucesso.");
+        setShowModal(true);
+        // Redirecionar para a tela anterior após 2 segundos
+        setTimeout(() => {
+          navigate(-1);
+        }, 2000);
+      } else if (createResponse.status === 401) {
+        setModalContent(
+          "A quantidade de itens de manutenção excede a quantidade disponível na sala."
+        );
+        setShowModal(true);
+      } else if (createResponse.status === 400) {
+        setModalContent("Todos os campos são obrigatórios.");
+        setShowModal(true);
       } else {
-        // Se a resposta contiver um erro, exiba a mensagem de erro em um alerta
-        alert("Erro ao Adicionar Manutenção à Sala: " + createResponse.data.error);
+        setModalContent("Erro desconhecido.");
+        setShowModal(true);
       }
     } catch (error) {
-      console.error("Erro ao criar a manutenção:", error);
-      alert("Erro ao Adicionar Manutenção à Sala: " + error.message);
+      console.log(error)
+      if (error.response && error.response.status === 401) {
+        // Verifique o status da resposta para identificar um erro de autorização
+        setModalContent(
+          "A quantidade de itens de manutenção excede a quantidade disponível na sala."
+        );
+        setShowModal(true);
+      } else if (error.response && error.response.status === 400) {
+        // Verifique o status da resposta para identificar um erro de solicitação inválida
+        setModalContent("Todos os campos são obrigatórios.");
+        setShowModal(true);
+      } else {
+        // Trate outros erros desconhecidos aqui
+        setModalContent("Erro desconhecido.");
+        setShowModal(true);
+      }
     }
   };
+
   const handleGoBack = () => {
     navigate(-1);
   };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <Container className="appContainer">
       <Container fluid className="topBar d-flex justify-content-start align-items-center">
@@ -110,11 +175,7 @@ function CreateManutencaoSala() {
       </Container>
       <Row className="justify-content-center align-items-center vh-100">
         <Col xs={12} md={6}>
-          <Form
-            onSubmit={handleSubmit}
-            id="form"
-            className="border p-4 rounded"
-          >
+          <Form onSubmit={handleSubmit} id="form" className="border p-4 rounded">
             <h1 className="title">Adicionar Manutenção à Sala</h1>
             <Form.Group className="mb-3">
               <label>Item</label>
@@ -149,6 +210,17 @@ function CreateManutencaoSala() {
           </Form>
         </Col>
       </Row>
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Mensagem</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{modalContent}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Fechar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }

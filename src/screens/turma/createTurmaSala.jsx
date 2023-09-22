@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Select from "react-select"; // Importe o componente Select
+import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -28,25 +28,48 @@ function CreateSalaTurma() {
           "http://localhost:3000/turma/getAll",
           config
         );
-
+  
+        // Buscar todas as turmas associadas a outras salas
+        const turmasAssociadasResponse = await axios.get(
+          `http://localhost:3000/sala_recebe_turma/getAll`,
+          config
+        );
+        
+        // Mapeie os dados de resposta para os IDs das turmas associadas
+        const turmasAssociadas = turmasAssociadasResponse.data.map(
+          (turmaAssociada) => turmaAssociada.salaRecebeTurma.id_turma
+        );
+        
+        
         // Mapeie os dados de resposta para o formato esperado pelo react-select
         const turmaOptionsData = turmaResponse.data.map((turma) => ({
           value: turma.id,
           label: turma.nome_turma,
           turno: turma.turno, // Salvar o turno da turma como uma propriedade
-        }));
+        })); 
+        console.log("Dados da API de turmas associadas:", turmasAssociadasResponse.data);
 
-        setTurmaOptions(turmaOptionsData);
         
+        console.log("Turma Options Data:", turmaOptionsData);
+        
+        // Remova as turmas que já estão associadas a outras salas
+      
+        
+        console.log("Turmas Associadas:", turmasAssociadas);
+        
+        const turmasDisponiveis = turmaOptionsData.filter(
+          (turma) => !turmasAssociadas.includes(turma.value)
+        );
+  
+        setTurmaOptions(turmasDisponiveis);
       } catch (error) {
         console.error("Erro ao buscar dados de turmas:", error);
       }
     }
-
+  
     fetchTurmas();
-    console.log(TurmaOptions)
-    
   }, []); // Execute isso apenas uma vez no carregamento inicial
+   // Execute isso apenas uma vez no carregamento inicial
 
   const handleTurmaChange = (selectedOption) => {
     setIdTurma(selectedOption.value); // Definir o IdTurma com base na turma selecionada
@@ -110,11 +133,7 @@ function CreateSalaTurma() {
       </Container>
       <Row className="justify-content-center align-items-center vh-100">
         <Col xs={12} md={6}>
-          <Form
-            onSubmit={handleSubmit}
-            id="form"
-            className="border p-4 rounded"
-          >
+          <Form onSubmit={handleSubmit} id="form" className="border p-4 rounded">
             <h1 className="title">Adicionar Turma à Sala</h1>
             <Form.Group className="mb-3">
               <label>Turma</label>
