@@ -122,9 +122,9 @@ function HomePage() {
               </Link>
             </Card>
             <Card style={{ width: "18rem" }}>
-              <Link to="/salas_disponiveis" className="card-link">
+              <Link to="/manutencoes_pendentes" className="card-link">
                 <Card.Body>
-                  <Card.Title>Salas Desocupadas</Card.Title>
+                  <Card.Title>Manuetenções Pendentes</Card.Title>
                   <div className="d-flex align-items-center justify-content-center h-100">
                     {loading ? (
                       <div className="d-flex justify-content-center">
@@ -137,14 +137,16 @@ function HomePage() {
                         <thead>
                           <tr>
                             <th>Sala</th>
-                            <th>Turno</th>
+                            <th>Item</th>
+                            <th>Quantidade</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {data.map((item, index) => (
+                          {man.map((item, index) => (
                             <tr key={index}>
-                              <td> Sala {item.sala}</td>
-                              <td>{item.turno}</td>
+                              <td> Sala {item.id_sala}</td>
+                              <td>{item.nome_item}</td>
+                              <td>{item.quantidade}</td>
                             </tr>
                           ))}
                         </tbody>

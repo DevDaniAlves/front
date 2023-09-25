@@ -30,6 +30,7 @@ import EditSala from './screens/salas/editSala';
 import EditPatrimonioSala from './screens/patrimonio/editPatrimonioSala';
 import EditManutencaoSala from './screens/manutencoes/editManutencao';
 import SalasDisponiveisPage from './screens/salas/salas_disponiveis';
+import ManutencoesPendentesPages from './screens/manutencoes/manutencoes_pendentes';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           <Route index path="/editarPatrimonioSala/:id" element={<EditPatrimonioSala/>} />
           <Route index path="/editarManutencaoSala/:id" element={<EditManutencaoSala/>} />
           <Route index path="/salas_disponiveis" element={<SalasDisponiveisPage/>} />
+          <Route index path="/manutencoes_pendentes" element={<ManutencoesPendentesPages/>} />
         </Route>
      
       
