@@ -65,7 +65,7 @@ function CreateItem() {
             nomeItem="form"
             className="border p-4 rounded"
           >
-            <h1 className="title">Criar Sala</h1>
+            <h1 className="title">Criar Item</h1>
             <Form.Group className="mb-3 floating-label">
               <Form.Control
                 type="text"
@@ -86,7 +86,7 @@ function CreateItem() {
                 borderColor: "#9e933a",
               }}
             >
-              Criar Sala
+              Criar Item
             </Button>
           </Form>
         </Col>

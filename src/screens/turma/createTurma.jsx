@@ -116,7 +116,7 @@ function CreateTurma() {
                 borderColor: "#9e933a",
               }}
             >
-              Criar Sala
+              Criar Turma
             </Button>
           </Form>
         </Col>
