@@ -17,12 +17,6 @@ function CustomToolbar() {
         <GridToolbarFilterButton className="filterButton" />
         <GridToolbarDensitySelector className="densityButton" />
       </div>
-      <Link className="link" to="/novaSala">
-        <Button className="addButton">
-          <FontAwesomeIcon className="addIcon" icon={faPlusCircle} />
-          Adicionar Nova Sala
-        </Button>
-      </Link>
     </GridToolbarContainer>
   );
 }
@@ -155,7 +149,7 @@ function SalasDisponiveisPage() {
 
   const handleRowClick = (params) => {
     const id = params.row.id;
-    navigate(`/sala/${id}`);
+    navigate(`/novaSalaTurma/${id}`);
   };
 
   return (

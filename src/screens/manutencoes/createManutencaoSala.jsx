@@ -12,11 +12,13 @@ function CreateManutencaoSala() {
   const [Quantidade, setQuantidade] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [patrimoniosDisponiveis, setPatrimoniosDisponiveis] = useState([]);
+
   const navigate = useNavigate();
-  const { id: IdSala } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    async function fetchItens() {
+    async function fetchData() {
       try {
         const token = localStorage.getItem("token");
         const config = {
@@ -25,63 +27,73 @@ function CreateManutencaoSala() {
             "Content-Type": "application/json",
           },
         };
-    
+
         // Busque todos os itens disponíveis
         const itemResponse = await axios.get(
           "http://localhost:3000/item/getAll",
           config
         );
-        async function fetchItensAssociados(IdSala) {
-          try {
-            const token = localStorage.getItem("token");
-            const config = {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            };
-        
-            // Substitua "localhost:3000/sua-api/itens-associados" pelo endpoint correto
-            const response = await axios.get(
-              `http://localhost:3000/manutencao/sala/${IdSala}`,
-              config
-            );
-        
-            return response.data; // Retorne os itens associados à sala
-          } catch (error) {
-            console.error("Erro ao buscar itens associados:", error);
-            return []; // Retorne um array vazio em caso de erro
-          }
+
+        if (!itemResponse.data || !Array.isArray(itemResponse.data)) {
+          console.error("Resposta inválida ao buscar itens");
+          return;
         }
-        
-    
-        // Busque os itens já associados à sala
-        const itensAssociadosResponse = await fetchItensAssociados(IdSala);
-    
-        // Mapeie os dados de resposta para o formato esperado pelo react-select
+
         const itemOptionsData = itemResponse.data.map((item) => ({
           value: item.id,
           label: item.nome_item,
         }));
-    
-        // Mapeie os itens já associados para obter seus IDs
-        const itensAssociadosIds = itensAssociadosResponse.data.map((item) => item.id_item);
-    
-        // Filtrar itens disponíveis para remover aqueles já associados
-        const itensDisponiveis = itemOptionsData.filter((item) => {
-          return !itensAssociadosIds.includes(item.value);
-        });
-    
-        setItemOptions(itensDisponiveis);
+
+        // Busque os patrimônios da sala específica
+        const itensAssociados = await fetchItensAssociados(id);
+
+        if (!Array.isArray(itensAssociados)) {
+          console.error("Resposta inválida ao buscar itens associados");
+          return;
+        }
+        console.log("Itens: ", itensAssociados)
+        // Extrair os IDs dos patrimônios já relacionados à sala em manutenções
+        const patrimoniosRelacionadosIds = itensAssociados.map(
+          (item) => item.item.id
+        );
+        console.log(patrimoniosRelacionadosIds)
+        // Filtrar os itens disponíveis para excluir aqueles que já estão relacionados à sala em manutenções
+        const itensNaoRelacionados = itemOptionsData.filter(
+          (item) => !patrimoniosRelacionadosIds.includes(item.value)
+        );
+
+        setPatrimoniosDisponiveis(itensNaoRelacionados);
+        setItemOptions(itensNaoRelacionados);
       } catch (error) {
         console.error("Erro ao buscar dados de itens:", error);
       }
     }
-    
 
-    fetchItens();
-  }, []);
+    fetchData();
+  }, [id]);
 
+  async function fetchItensAssociados(IdSala) {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      // Substitua "localhost:3000/manutencao_sala/${id}" pelo endpoint correto
+      const response = await axios.get(
+        `http://localhost:3000/manutencao_sala/${IdSala}`,
+        config
+      );
+
+      return response.data; // Retorne os itens associados à sala em manutenções
+    } catch (error) {
+      console.error("Erro ao buscar itens associados à sala em manutenções:", error);
+      return []; // Retorne um array vazio em caso de erro
+    }
+  }
   const handleItemChange = (selectedOption) => {
     setIdItem(selectedOption.value);
   };
@@ -97,7 +109,7 @@ function CreateManutencaoSala() {
 
     const manutencaoData = {
       id_item: IdItem,
-      id_sala: IdSala,
+      id_sala: id,
       quantidade: Quantidade,
       resolvido: false,
     };

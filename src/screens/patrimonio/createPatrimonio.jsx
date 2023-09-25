@@ -10,10 +10,7 @@ function CreatePatrimonio() {
   const [IdItem, setIdItem] = useState("");
   const [Quantidade, setQuantidade] = useState("");
   const [itemOptions, setItemOptions] = useState([]);
-  const [salaOptions, setSalaOptions] = useState([]);
-  const [patrimoniosSala, setPatrimoniosSala] = useState([]);
   const [patrimoniosDisponiveis, setPatrimoniosDisponiveis] = useState([]);
-  const [loadingPatrimonios, setLoadingPatrimonios] = useState(true);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -27,7 +24,7 @@ function CreatePatrimonio() {
             'Content-Type': 'application/json',
           },
         };
-        
+
         // Buscar todos os itens disponíveis
         const itemResponse = await axios.get(
           "http://localhost:3000/item/getAll",
@@ -39,44 +36,29 @@ function CreatePatrimonio() {
           label: item.nome_item,
         }));
 
-        setItemOptions(itemOptionsData);
-
-        // Buscar informações da sala com base no id dos parâmetros
-        const salaResponse = await axios.get(
-          `http://localhost:3000/sala/getById/${id}`,
-          config
-        );
-
-        const salaOptionData = {
-          value: salaResponse.data.id,
-          label: salaResponse.data.id,
-        };
-
-        setSalaOptions([salaOptionData]);
-
-        // Buscar os patrimônios da sala
+        // Buscar os patrimônios da sala específica
         const patrimonioSalaResponse = await axios.get(
-          `http://localhost:3000/patrimonio_sala/getAll/${id}`,
+          `http://localhost:3000/patrimonio_sala/${id}`,
           config
         );
 
-        setPatrimoniosSala(patrimonioSalaResponse.data);
+        if (!patrimonioSalaResponse.data) {
+          console.error("Sala não encontrada");
+          return;
+        }
 
-        // Buscar todos os patrimônios disponíveis
-        const patrimonioDisponivelResponse = await axios.get(
-          "http://localhost:3000/patrimonio_sala/getAll",
-          config
+        // Extrair os IDs dos patrimônios já relacionados à sala
+        const patrimoniosRelacionadosIds = patrimonioSalaResponse.data.map(
+          (item) => item.item.id
         );
 
-        const patrimoniosNaoRelacionados = patrimonioDisponivelResponse.data.filter(
-          (patrimonio) =>
-            !patrimonioSalaResponse.data.some(
-              (relacionado) => relacionado.id_patrimonio === patrimonio.id
-            )
+        // Filtrar os itens disponíveis para excluir os que já estão relacionados à sala
+        const itensNaoRelacionados = itemOptionsData.filter(
+          (item) => !patrimoniosRelacionadosIds.includes(item.value)
         );
 
-        setPatrimoniosDisponiveis(patrimoniosNaoRelacionados);
-        setLoadingPatrimonios(false);
+        setPatrimoniosDisponiveis(itensNaoRelacionados);
+        setItemOptions(itemOptionsData);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
@@ -105,7 +87,7 @@ function CreatePatrimonio() {
       const createResponse = await axios.post(
         "http://localhost:3000/patrimonio_sala/create",
         {
-          id_patrimonio: IdItem,
+          id_item: IdItem,
           id_sala: id,
           quantidade: Quantidade,
         },
@@ -140,13 +122,8 @@ function CreatePatrimonio() {
             <Form.Group className="mb-3">
               <label>Item</label>
               <Select
-                options={patrimoniosDisponiveis.map((patrimonio) => ({
-                  value: patrimonio.id,
-                  label: patrimonio.id,
-                }))}
-                value={patrimoniosDisponiveis.find(
-                  (patrimonio) => patrimonio.value === IdItem
-                )}
+                options={patrimoniosDisponiveis}
+                value={patrimoniosDisponiveis.find((item) => item.value === IdItem)}
                 onChange={(selectedOption) => setIdItem(selectedOption.value)}
               />
             </Form.Group>
