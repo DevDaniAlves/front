@@ -30,7 +30,7 @@ function CreateItem() {
     try {
       // Se o ID for único, continue com o envio do formulário
       const createResponse = await axios.post(
-        "http://localhost:3000/item/create",
+        "http://18.228.219.100:3000/item/create",
         {
           nome_item: nomeItem
         },

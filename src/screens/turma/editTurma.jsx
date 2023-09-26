@@ -22,7 +22,7 @@ function EditTurma() {
 
     // Fazendo a solicitação GET para obter os dados da turma pelo ID
     axios
-      .get(`http://localhost:3000/turma/getById/${id}`, config)
+      .get(`http://18.228.219.100:3000/turma/getById/${id}`, config)
       .then((response) => {
         const turmaData = response.data; // Dados da turma obtidos da API
         setProfessor(turmaData.professor);

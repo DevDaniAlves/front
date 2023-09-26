@@ -25,7 +25,7 @@ function EditSala() {
   
     // Fazendo uma solicitação GET para obter os detalhes da sala com base no ID
     axios
-      .get(`http://localhost:3000/sala/getById/${id}`, config)
+      .get(`http://18.228.219.100:3000/sala/getById/${id}`, config)
       .then((response) => {
         const salaData = response.data;
         // Definindo os valores iniciais dos campos após a resposta chegar
@@ -60,7 +60,7 @@ function EditSala() {
     try {
       // Faça uma solicitação PUT para atualizar os detalhes da sala com base no ID
       const updateResponse = await axios.put(
-        `http://localhost:3000/sala/update/${id}`,
+        `http://18.228.219.100:3000/sala/update/${id}`,
         salaData,
         config
       );

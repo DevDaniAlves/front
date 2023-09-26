@@ -85,7 +85,7 @@ function InformacoesPage() {
     };
 
     // Fazendo a solicitação GET para obter os detalhes da sala
-    axios.get(`http://localhost:3000/sala/getById/${id}`, config)
+    axios.get(`http://18.228.219.100:3000/sala/getById/${id}`, config)
       .then(response => {
         setRoom(response.data); // Set the state with the data from the response
         setLoading(false); // Set loading as false to indicate that the data has been loaded

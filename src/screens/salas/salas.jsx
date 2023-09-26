@@ -123,7 +123,7 @@ function SalasPage() {
     };
 
     axios
-      .delete(`http://localhost:3000/sala/delete/${deleteItemId}`, config)
+      .delete(`http://18.228.219.100:3000/sala/delete/${deleteItemId}`, config)
       .then((response) => {
         console.log('Sala excluída com sucesso!', response);
         const updatedRooms = rooms.filter((room) => room.id !== deleteItemId);
@@ -142,7 +142,7 @@ function SalasPage() {
       }
     };
 
-    axios.get('http://localhost:3000/sala/getAll', config)
+    axios.get('http://18.228.219.100:3000/sala/getAll', config)
       .then(response => {
         setRooms(response.data);
         setLoading(false);

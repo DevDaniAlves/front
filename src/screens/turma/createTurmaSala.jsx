@@ -25,13 +25,13 @@ function CreateSalaTurma() {
           },
         };
         const turmaResponse = await axios.get(
-          "http://localhost:3000/turma/getAll",
+          "http://18.228.219.100:3000/turma/getAll",
           config
         );
   
         // Buscar todas as turmas associadas a outras salas
         const turmasAssociadasResponse = await axios.get(
-          `http://localhost:3000/sala_recebe_turma/getAll`,
+          `http://18.228.219.100:3000/sala_recebe_turma/getAll`,
           config
         );
         
@@ -96,7 +96,7 @@ function CreateSalaTurma() {
         },
       };
       const createResponse = await axios.post(
-        "http://localhost:3000/sala_recebe_turma/create",
+        "http://18.228.219.100:3000/sala_recebe_turma/create",
         {
           id_sala: id,
           id_turma: IdTurma,

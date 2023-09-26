@@ -30,7 +30,7 @@ function CreateManutencaoSala() {
 
         // Busque todos os itens disponíveis
         const itemResponse = await axios.get(
-          "http://localhost:3000/item/getAll",
+          "http://18.228.219.100:3000/item/getAll",
           config
         );
 
@@ -82,9 +82,9 @@ function CreateManutencaoSala() {
         },
       };
 
-      // Substitua "localhost:3000/manutencao_sala/${id}" pelo endpoint correto
+      // Substitua "18.228.219.100:3000/manutencao_sala/${id}" pelo endpoint correto
       const response = await axios.get(
-        `http://localhost:3000/manutencao_sala/${IdSala}`,
+        `http://18.228.219.100:3000/manutencao_sala/${IdSala}`,
         config
       );
 
@@ -123,7 +123,7 @@ function CreateManutencaoSala() {
         },
       };
       const createResponse = await axios.post(
-        "http://localhost:3000/manutencao/create",
+        "http://18.228.219.100:3000/manutencao/create",
         manutencaoData,
         config
       );
