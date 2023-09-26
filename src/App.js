@@ -15,7 +15,7 @@ import PatrimonioSalaPage from './screens/patrimonio/patrimonioSala';
 
 import PrivateRoute from './screens/privateRoute/privateRoute';
 import TurmaSalaPage from './screens/turma/turmaSala';
-import InformacoesPage from './screens/informações/informações';
+import InformacoesPage from './screens/informacoes/informacoes';
 import ManutencoesSalaPage from './screens/manutencoes/manutencoesSala';
 import CreateSala from './screens/salas/createSala';
 import CreateItem from './screens/patrimonio/createItem';

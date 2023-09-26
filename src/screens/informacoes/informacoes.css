@@ -1,4 +1,5 @@
 
+
 .icon{
     margin-left: 10px;
     align-items: center;
@@ -11,6 +12,7 @@
   #IconButton{
     background-color: transparent;
     color: transparent;
+    margin-left: 2%;
   }
   .iconButton:hover{
     background-color: lightgray;
@@ -20,6 +22,7 @@
   .editButton{
     color: orange;
     height: 20px;
+  
   }
   .deleteButton{
     color: red;
@@ -67,7 +70,4 @@
   .addIcon{
     margin-right: 3%;
   }
-  .link{
-    color: transparent;
-    width: 60vw;
-  }
+  
