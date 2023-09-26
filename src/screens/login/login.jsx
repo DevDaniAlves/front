@@ -22,7 +22,7 @@ function Login() {
 
     try {
       
-      axios.post('http://54.233.233.32:3000/user/sigin',
+      axios.post('http://localhost:3000/user/sigin',
       {
         name,
         password
