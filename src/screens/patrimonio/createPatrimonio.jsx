@@ -27,7 +27,7 @@ function CreatePatrimonio() {
 
         // Buscar todos os itens disponíveis
         const itemResponse = await axios.get(
-          "http://18.228.219.100:3000/item/getAll",
+          "http://54.233.233.32:3000/item/getAll",
           config
         );
 
@@ -38,7 +38,7 @@ function CreatePatrimonio() {
 
         // Buscar os patrimônios da sala específica
         const patrimonioSalaResponse = await axios.get(
-          `http://18.228.219.100:3000/patrimonio_sala/${id}`,
+          `http://54.233.233.32:3000/patrimonio_sala/${id}`,
           config
         );
 
@@ -85,7 +85,7 @@ function CreatePatrimonio() {
       };
 
       const createResponse = await axios.post(
-        "http://18.228.219.100:3000/patrimonio_sala/create",
+        "http://54.233.233.32:3000/patrimonio_sala/create",
         {
           id_item: IdItem,
           id_sala: id,

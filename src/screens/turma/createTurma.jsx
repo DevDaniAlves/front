@@ -38,7 +38,7 @@ function CreateTurma() {
     try {
       // Se o ID for único, continue com o envio do formulário
       const createResponse = await axios.post(
-        "http://18.228.219.100:3000/turma/create",
+        "http://54.233.233.32:3000/turma/create",
         {
           professor: professor,
           nome_turma: nomeTurma,

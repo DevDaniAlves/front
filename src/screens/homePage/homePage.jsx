@@ -22,7 +22,7 @@ function HomePage() {
     };
 
     axios
-      .get("http://18.228.219.100:3000/sala/getAll", config) // Substitua pela URL da sua API
+      .get("http://54.233.233.32:3000/sala/getAll", config) // Substitua pela URL da sua API
       .then((response) => {
         const newData = [];
 
@@ -58,7 +58,7 @@ function HomePage() {
     };
 
     axios
-      .get("http://18.228.219.100:3000/manutencao/getAll", config) // Substitua pela URL da sua API
+      .get("http://54.233.233.32:3000/manutencao/getAll", config) // Substitua pela URL da sua API
       .then((response) => {
         const formattedItems = response.data
           .filter((item) => item.Manutencao.resolvido === false)

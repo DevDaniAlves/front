@@ -23,7 +23,7 @@ function EditManutencaoSala() {
           },
         };
         const manutencaoResponse = await axios.get(
-          `http://18.228.219.100:3000/manutencao/getById/${IdManutencao}`,
+          `http://54.233.233.32:3000/manutencao/getById/${IdManutencao}`,
           config
         );
 
@@ -62,7 +62,7 @@ function EditManutencaoSala() {
         },
       };
       const updateResponse = await axios.put(
-        `http://18.228.219.100:3000/manutencao/update/${IdManutencao}`,
+        `http://54.233.233.32:3000/manutencao/update/${IdManutencao}`,
         manutencaoData,
         config
       );

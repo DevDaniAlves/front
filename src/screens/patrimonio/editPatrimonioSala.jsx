@@ -22,7 +22,7 @@ function EditPatrimonioSala() {
 
     // Fazendo uma solicitação GET para obter os detalhes do patrimônio da sala com base no ID
     axios
-      .get(`http://18.228.219.100:3000/patrimonio_sala/getById/${id}`, config)
+      .get(`http://54.233.233.32:3000/patrimonio_sala/getById/${id}`, config)
       .then((response) => {
         const patrimonioSalaData = response.data;
         // Definindo os valores iniciais dos campos
@@ -53,7 +53,7 @@ function EditPatrimonioSala() {
     try {
       // Faça uma solicitação PUT para atualizar a quantidade do patrimônio da sala com base no ID
       const updateResponse = await axios.put(
-        `http://18.228.219.100:3000/patrimonio_sala/update/${id}`,
+        `http://54.233.233.32:3000/patrimonio_sala/update/${id}`,
         patrimonioSalaData,
         config
       );

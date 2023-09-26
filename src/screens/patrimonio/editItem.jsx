@@ -22,7 +22,7 @@ function EditItem() {
 
         // Faz uma solicitação GET para obter os detalhes do item pelo ID
         const response = await axios.get(
-          `http://18.228.219.100:3000/item/getById/${id}`,
+          `http://54.233.233.32:3000/item/getById/${id}`,
           config
         );
 
@@ -56,7 +56,7 @@ function EditItem() {
     try {
       // Se o ID for único, continue com o envio do formulário
       const updateResponse = await axios.put(
-        `http://18.228.219.100:3000/item/update/${id}`,
+        `http://54.233.233.32:3000/item/update/${id}`,
         {
           nome_item: nomeItem,
         },

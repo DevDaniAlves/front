@@ -42,7 +42,7 @@ function TurmasPage() {
       },
     };
 
-    axios.get('http://18.228.219.100:3000/turma/getAll', config)
+    axios.get('http://54.233.233.32:3000/turma/getAll', config)
       .then(response => {
         setRooms(response.data);
         setLoading(false);
@@ -77,7 +77,7 @@ function TurmasPage() {
     };
 
     axios
-      .delete(`http://18.228.219.100:3000/turma/delete/${deleteItemId}`, config)
+      .delete(`http://54.233.233.32:3000/turma/delete/${deleteItemId}`, config)
       .then((response) => {
         console.log('Turma excluída com sucesso!', response);
         const updatedRooms = rooms.filter((room) => room.id !== deleteItemId);
