@@ -142,80 +142,86 @@ function HomePage() {
           <Col>
   
             <div className="card-container">
-              <Card style={{ width: "18rem" }}>
-                <Link to="/salas_disponiveis" className="card-link">
-                  <Card.Body>
-                    <Card.Title>Salas Desocupadas</Card.Title>
-                    <div className="d-flex align-items-center justify-content-center h-100">
-                      {loading ? (
-                        <div className="d-flex justify-content-center">
-                          <CircularProgress />
-                        </div>
-                      ) : data.length === 0 ? (
-                        <p>Nenhuma sala disponível</p>
-                      ) : (
-                        <Table striped bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>Sala</th>
-                              <th>Turno</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {data.map((item, index) => (
-                              <tr key={index}>
-                                <td> Sala {item.sala}</td>
-                                <td>{item.turno}</td>
+              <Col md={4}>
+                <Card style={{ width: "18rem" }}>
+                  <Link to="/salas_disponiveis" className="card-link">
+                    <Card.Body>
+                      <Card.Title>Salas Desocupadas</Card.Title>
+                      <div className="d-flex align-items-center justify-content-center h-100">
+                        {loading ? (
+                          <div className="d-flex justify-content-center">
+                            <CircularProgress />
+                          </div>
+                        ) : data.length === 0 ? (
+                          <p>Nenhuma sala disponível</p>
+                        ) : (
+                          <Table striped bordered hover responsive>
+                            <thead>
+                              <tr>
+                                <th>Sala</th>
+                                <th>Turno</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </Table>
-                      )}
-                    </div>
-                  </Card.Body>
-                </Link>
-              </Card>
+                            </thead>
+                            <tbody>
+                              {data.map((item, index) => (
+                                <tr key={index}>
+                                  <td> Sala {item.sala}</td>
+                                  <td>{item.turno}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        )}
+                      </div>
+                    </Card.Body>
+                  </Link>
+                </Card>
+              </Col>
               
-              <Card className="centered-card" style={{ width: "100%" }}>
-                <Card.Title>Manutenções</Card.Title>
-                <ReactECharts option={option} style={{ height: "40vh" }} />
-              </Card>
+              <Col md={4}>
+                <Card className="centered-card" style={{ width: "100%" }}>
+                  <Card.Title>Manutenções</Card.Title>
+                  <ReactECharts option={option} style={{ height: "40vh" }} />
+                </Card>
+              </Col>
   
-              <Card style={{ width: "18rem" }}>
-                <Link to="/manutencoes_pendentes" className="card-link">
-                  <Card.Body>
-                    <Card.Title>Manutenções Pendentes</Card.Title>
-                    <div className="d-flex align-items-center justify-content-center h-100">
-                      {loading ? (
-                        <div className="d-flex justify-content-center">
-                          <CircularProgress />
-                        </div>
-                      ) : man.length === 0 ? (
-                        <p>Nenhuma manutenção pendente</p>
-                      ) : (
-                        <Table striped bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>Sala</th>
-                              <th>Item</th>
-                              <th>Quantidade</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {man.map((item, index) => (
-                              <tr key={index}>
-                                <td> Sala {item.id_sala}</td>
-                                <td>{item.nome_item}</td>
-                                <td>{item.quantidade}</td>
+              <Col md={4}>
+                <Card style={{ width: "18rem" }}>
+                  <Link to="/manutencoes_pendentes" className="card-link">
+                    <Card.Body>
+                      <Card.Title>Manutenções Pendentes</Card.Title>
+                      <div className="d-flex align-items-center justify-content-center h-100">
+                        {loading ? (
+                          <div className="d-flex justify-content-center">
+                            <CircularProgress />
+                          </div>
+                        ) : man.length === 0 ? (
+                          <p>Nenhuma manutenção pendente</p>
+                        ) : (
+                          <Table striped bordered hover responsive>
+                            <thead>
+                              <tr>
+                                <th>Sala</th>
+                                <th>Item</th>
+                                <th>Quantidade</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </Table>
-                      )}
-                    </div>
-                  </Card.Body>
-                </Link>
-              </Card>
+                            </thead>
+                            <tbody>
+                              {man.map((item, index) => (
+                                <tr key={index}>
+                                  <td> Sala {item.id_sala}</td>
+                                  <td>{item.nome_item}</td>
+                                  <td>{item.quantidade}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        )}
+                      </div>
+                    </Card.Body>
+                  </Link>
+                </Card>
+              </Col>
   
               {/* Outros cards aqui */}
             </div>
