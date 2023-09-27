@@ -154,7 +154,7 @@ function HomePage() {
                       ) : data.length === 0 ? (
                         <p>Nenhuma sala disponível</p>
                       ) : (
-                        <Table striped bordered hover>
+                        <Table striped bordered hover responsive>
                           <thead>
                             <tr>
                               <th>Sala</th>
@@ -176,10 +176,10 @@ function HomePage() {
                 </Link>
               </Card>
               
-    <Card className="centered-card" style={{ width: "100%", height: "40vh" }}>
-      <Card.Title>Manutenções</Card.Title>
-      <ReactECharts option={option} style={{ height: "100%", width: "100%" }} />
-    </Card>
+              <Card className="centered-card" style={{ width: "100%" }}>
+                <Card.Title>Manutenções</Card.Title>
+                <ReactECharts option={option} style={{ height: "40vh" }} />
+              </Card>
   
               <Card style={{ width: "18rem" }}>
                 <Link to="/manutencoes_pendentes" className="card-link">
@@ -190,10 +190,10 @@ function HomePage() {
                         <div className="d-flex justify-content-center">
                           <CircularProgress />
                         </div>
-                      ) : data.length === 0 ? (
-                        <p>Nenhuma sala disponível</p>
+                      ) : man.length === 0 ? (
+                        <p>Nenhuma manutenção pendente</p>
                       ) : (
-                        <Table striped bordered hover>
+                        <Table striped bordered hover responsive>
                           <thead>
                             <tr>
                               <th>Sala</th>
@@ -216,7 +216,7 @@ function HomePage() {
                   </Card.Body>
                 </Link>
               </Card>
-
+  
               {/* Outros cards aqui */}
             </div>
           </Col>
