@@ -23,5 +23,10 @@
 .centred-card{
   width: 100%;
 }
+.table-container {
+  max-height: 300px; /* Defina a altura máxima que desejar */
+  overflow-y: auto; /* Adicione uma barra de rolagem vertical quando necessário */
+}
+
   
 
