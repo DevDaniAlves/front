@@ -23,7 +23,7 @@ function EditManutencaoSala() {
           },
         };
         const manutencaoResponse = await axios.get(
-          `http://54.233.233.32:3000/manutencao/getById/${IdManutencao}`,
+          `https://api-emb3.onrender.com/manutencao/getById/${IdManutencao}`,
           config
         );
 
@@ -62,7 +62,7 @@ function EditManutencaoSala() {
         },
       };
       const updateResponse = await axios.put(
-        `http://54.233.233.32:3000/manutencao/update/${IdManutencao}`,
+        `https://api-emb3.onrender.com/manutencao/update/${IdManutencao}`,
         manutencaoData,
         config
       );

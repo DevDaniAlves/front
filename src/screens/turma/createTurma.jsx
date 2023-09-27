@@ -38,7 +38,7 @@ function CreateTurma() {
     try {
       // Se o ID for único, continue com o envio do formulário
       const createResponse = await axios.post(
-        "http://54.233.233.32:3000/turma/create",
+        "https://api-emb3.onrender.com/turma/create",
         {
           professor: professor,
           nome_turma: nomeTurma,

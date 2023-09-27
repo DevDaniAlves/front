@@ -74,12 +74,12 @@ function PatrimonioPage() {
     };
 
     axios
-      .get('http://54.233.233.32:3000/item/getAll', config)
+      .get('https://api-emb3.onrender.com/item/getAll', config)
       .then((response) => {
         const availableItems = response.data;
 
         axios
-          .get('http://54.233.233.32:3000/patrimonio_total', config)
+          .get('https://api-emb3.onrender.com/patrimonio_total', config)
           .then((patrimonioResponse) => {
             const patrimonioItems = patrimonioResponse.data;
 
@@ -136,7 +136,7 @@ function PatrimonioPage() {
     };
 
     axios
-      .delete(`http://54.233.233.32:3000/item/delete/${idToDelete}`, config)
+      .delete(`https://api-emb3.onrender.com/item/delete/${idToDelete}`, config)
       .then((response) => {
         console.log('Item excluído com sucesso!', response);
         window.location.reload();

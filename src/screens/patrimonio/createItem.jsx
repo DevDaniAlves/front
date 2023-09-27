@@ -30,7 +30,7 @@ function CreateItem() {
     try {
       // Se o ID for único, continue com o envio do formulário
       const createResponse = await axios.post(
-        "http://54.233.233.32:3000/item/create",
+        "https://api-emb3.onrender.com/item/create",
         {
           nome_item: nomeItem
         },

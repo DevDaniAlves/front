@@ -30,7 +30,7 @@ function CreateManutencaoSala() {
 
         // Busque todos os itens disponíveis
         const itemResponse = await axios.get(
-          "http://54.233.233.32:3000/item/getAll",
+          "https://api-emb3.onrender.com/item/getAll",
           config
         );
 
@@ -84,7 +84,7 @@ function CreateManutencaoSala() {
 
       // Substitua "54.233.233.32:3000/manutencao_sala/${id}" pelo endpoint correto
       const response = await axios.get(
-        `http://54.233.233.32:3000/manutencao_sala/${IdSala}`,
+        `https://api-emb3.onrender.com/manutencao_sala/${IdSala}`,
         config
       );
 
@@ -123,7 +123,7 @@ function CreateManutencaoSala() {
         },
       };
       const createResponse = await axios.post(
-        "http://54.233.233.32:3000/manutencao/create",
+        "https://api-emb3.onrender.com/manutencao/create",
         manutencaoData,
         config
       );

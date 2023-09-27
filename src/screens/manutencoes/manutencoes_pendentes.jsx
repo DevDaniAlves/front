@@ -45,7 +45,7 @@ function ManutencoesPendentesPages() {
     };
 
     axios
-      .delete(`http://54.233.233.32:3000/manutencao/delete/${idToDelete}`, config)
+      .delete(`https://api-emb3.onrender.com/manutencao/delete/${idToDelete}`, config)
       .then((response) => {
         // Se a exclusão for bem-sucedida, atualize o estado local para refletir a exclusão.
         setItems((prevItems) => prevItems.filter((item) => item.id !== idToDelete));
@@ -113,7 +113,7 @@ function ManutencoesPendentesPages() {
       }
     };
   
-    axios.get(`http://54.233.233.32:3000/manutencao/getAll`, config)
+    axios.get(`https://api-emb3.onrender.com/manutencao/getAll`, config)
       .then(response => {
         const formattedItems = response.data.map(item => ({
           id: item.Manutencao.id,

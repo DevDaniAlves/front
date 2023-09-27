@@ -49,7 +49,7 @@ function TurmaSalaPage() {
       },
     };
 
-    axios.delete(`http://54.233.233.32:3000/sala_recebe_turma/delete/${deleteItemId}`, config)
+    axios.delete(`https://api-emb3.onrender.com/sala_recebe_turma/delete/${deleteItemId}`, config)
       .then((response) => {
         console.log('Turma da sala excluída com sucesso!', response);
         // Atualize a lista de turmas da sala após a exclusão
@@ -96,7 +96,7 @@ function TurmaSalaPage() {
       }
     };
 
-    axios.get(`http://54.233.233.32:3000/sala_recebe_turma/${id}`, config)
+    axios.get(`https://api-emb3.onrender.com/sala_recebe_turma/${id}`, config)
       .then(response => {
 
         const formattedItems = response.data.map(item => ({

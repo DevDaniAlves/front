@@ -85,7 +85,7 @@ function InformacoesPage() {
     };
 
     // Fazendo a solicitação GET para obter os detalhes da sala
-    axios.get(`http://54.233.233.32:3000/sala/getById/${id}`, config)
+    axios.get(`https://api-emb3.onrender.com/sala/getById/${id}`, config)
       .then(response => {
         setRoom(response.data); // Set the state with the data from the response
         setLoading(false); // Set loading as false to indicate that the data has been loaded

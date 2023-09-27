@@ -36,7 +36,7 @@ function CreateSala() {
       },
     };
     try {
-      const response = await axios.get("http://54.233.233.32:3000/sala/getAll", config);
+      const response = await axios.get("https://api-emb3.onrender.com/sala/getAll", config);
       const salas = response.data;
 
       // Verifique se o ID já existe
@@ -81,7 +81,7 @@ function CreateSala() {
     try {
       // Se o ID for único, continue com o envio do formulário
       const createResponse = await axios.post(
-        "http://54.233.233.32:3000/sala/create",
+        "https://api-emb3.onrender.com/sala/create",
         {
           capacidade: Capacidade,
           localizacao: Localizacao,

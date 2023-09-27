@@ -42,7 +42,7 @@ function PatrimonioSalaPage() {
       }
     };
 
-    axios.get(`http://54.233.233.32:3000/patrimonio_sala/${id}`, config)
+    axios.get(`https://api-emb3.onrender.com/patrimonio_sala/${id}`, config)
       .then(response => {
         const formattedItems = response.data.map(item => ({
           id: item.patrimonioSala.id,
@@ -117,7 +117,7 @@ function PatrimonioSalaPage() {
       }
     };
 
-    axios.delete(`http://54.233.233.32:3000/patrimonio_sala/delete/${idToDelete}`, config)
+    axios.delete(`https://api-emb3.onrender.com/patrimonio_sala/delete/${idToDelete}`, config)
       .then(response => {
         console.log('Item excluído com sucesso:', response);
         // Atualize a lista de itens após a exclusão bem-sucedida, se necessário.

@@ -123,7 +123,7 @@ function SalasPage() {
     };
 
     axios
-      .delete(`http://54.233.233.32:3000/sala/delete/${deleteItemId}`, config)
+      .delete(`https://api-emb3.onrender.com/sala/delete/${deleteItemId}`, config)
       .then((response) => {
         console.log('Sala excluída com sucesso!', response);
         const updatedRooms = rooms.filter((room) => room.id !== deleteItemId);
@@ -142,7 +142,7 @@ function SalasPage() {
       }
     };
 
-    axios.get('http://54.233.233.32:3000/sala/getAll', config)
+    axios.get('https://api-emb3.onrender.com/sala/getAll', config)
       .then(response => {
         setRooms(response.data);
         setLoading(false);

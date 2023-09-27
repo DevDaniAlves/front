@@ -25,7 +25,7 @@ function HomePage() {
     };
 
     axios
-      .get("http://localhost:3000/sala/getAll", config) // Substitua pela URL da sua API
+      .get("https://api-emb3.onrender.com/sala/getAll", config) // Substitua pela URL da sua API
       .then((response) => {
         const newData = [];
 
@@ -62,7 +62,7 @@ function HomePage() {
     };
 
     axios
-      .get("http://localhost:3000/manutencao/getAll", config) // Substitua pela URL da sua API
+      .get("https://api-emb3.onrender.com/manutencao/getAll", config) // Substitua pela URL da sua API
       .then((response) => {
         const formattedItems = response.data
           .filter((item) => item.Manutencao.resolvido === false)

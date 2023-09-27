@@ -27,7 +27,7 @@ function CreatePatrimonio() {
 
         // Buscar todos os itens disponíveis
         const itemResponse = await axios.get(
-          "http://54.233.233.32:3000/item/getAll",
+          "https://api-emb3.onrender.com/item/getAll",
           config
         );
 
@@ -38,7 +38,7 @@ function CreatePatrimonio() {
 
         // Buscar os patrimônios da sala específica
         const patrimonioSalaResponse = await axios.get(
-          `http://54.233.233.32:3000/patrimonio_sala/${id}`,
+          `https://api-emb3.onrender.com/patrimonio_sala/${id}`,
           config
         );
 
@@ -85,7 +85,7 @@ function CreatePatrimonio() {
       };
 
       const createResponse = await axios.post(
-        "http://54.233.233.32:3000/patrimonio_sala/create",
+        "https://api-emb3.onrender.com/patrimonio_sala/create",
         {
           id_item: IdItem,
           id_sala: id,

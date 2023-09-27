@@ -25,13 +25,13 @@ function CreateSalaTurma() {
           },
         };
         const turmaResponse = await axios.get(
-          "http://54.233.233.32:3000/turma/getAll",
+          "https://api-emb3.onrender.com/turma/getAll",
           config
         );
   
         // Buscar todas as turmas associadas a outras salas
         const turmasAssociadasResponse = await axios.get(
-          `http://54.233.233.32:3000/sala_recebe_turma/getAll`,
+          `https://api-emb3.onrender.com/sala_recebe_turma/getAll`,
           config
         );
         
@@ -96,7 +96,7 @@ function CreateSalaTurma() {
         },
       };
       const createResponse = await axios.post(
-        "http://54.233.233.32:3000/sala_recebe_turma/create",
+        "https://api-emb3.onrender.com/sala_recebe_turma/create",
         {
           id_sala: id,
           id_turma: IdTurma,

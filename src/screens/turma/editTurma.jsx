@@ -22,7 +22,7 @@ function EditTurma() {
 
     // Fazendo a solicitação GET para obter os dados da turma pelo ID
     axios
-      .get(`http://54.233.233.32:3000/turma/getById/${id}`, config)
+      .get(`https://api-emb3.onrender.com/turma/getById/${id}`, config)
       .then((response) => {
         const turmaData = response.data; // Dados da turma obtidos da API
         setProfessor(turmaData.professor);

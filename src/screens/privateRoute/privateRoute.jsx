@@ -6,7 +6,7 @@ function PrivateRoute() {
 
   if (!token) {
     // Se não estiver autenticado, redireciona para a página de login
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   // Se estiver autenticado, permite o acesso às rotas protegidas dentro do Outlet
