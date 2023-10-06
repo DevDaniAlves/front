@@ -46,7 +46,9 @@ function Login() {
 
   return (
     <Container className="appContainer">
-      <Container fluid className="topBar"></Container>
+      <Container fluid className="topBar">
+        <h2>Seja Bem Vindo</h2>
+      </Container>
       <Row className="justify-content-center align-items-center vh-100">
         <Col xs={12} md={6}>
           <Form onSubmit={handleSubmit} id="form" className="border p-4 rounded">

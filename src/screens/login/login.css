@@ -39,14 +39,22 @@
     margin-bottom: 12%;
     text-align: center;
   }
-  .topBar{
+  .topBar {
     background-color: #9A86EB;
-    height: 7vh; /* Altura da top bar */
-    width: 100%; /* Largura total da tela */
-    position: fixed; /* Fixe a top bar no topo da tela */
+    height: 7vh;
+    width: 100%;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 1;
+    display: flex;
+    justify-content: center; /* Centralize horizontalmente */
+    align-items: center; /* Centralize verticalmente */
+    color: #fff; /* Cor do texto */
+  }
+  
+  .topBar h2 {
+    margin: 0; /* Remova margem para alinhar verticalmente */
   }
 #form{
   justify-content: center;
